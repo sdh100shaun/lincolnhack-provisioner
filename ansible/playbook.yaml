@@ -1,0 +1,9 @@
+---
+- hosts: live
+  remote_user: root
+  vars_files:
+    - vars/all.yaml
+  roles:
+    - geerlingguy.repo-remi
+    - php7
+    - nginx

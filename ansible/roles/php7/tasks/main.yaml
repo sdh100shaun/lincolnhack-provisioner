@@ -1,0 +1,24 @@
+---
+- name: Add PHP 72
+  yum: name=php72 state=present
+- name: symlink
+  file:
+    src: "/usr/bin/php72"
+    dest: "/usr/bin/php"
+    state: link
+    force: yes
+
+- name: Install PHP 7 packages
+  yum: pkg={{ item }} state=latest
+  with_items:
+    - "{{ php.packages }}"
+
+
+- name: Create php.ini defaults
+  lineinfile: dest=/etc/opt/remi/php72/php.ini regexp='^;date.timezone =' line='date.timezone ={{ php.timezone }}'
+
+- name: Create PHP-FPM service
+  shell: systemctl enable php72-php-fpm.service
+
+- name: Start the php-fpm service
+  shell: systemctl start php72-php-fpm.service
