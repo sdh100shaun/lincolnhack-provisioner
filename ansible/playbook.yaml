@@ -6,4 +6,5 @@
   roles:
     - geerlingguy.repo-remi
     - php7
+    - acme
     - nginx

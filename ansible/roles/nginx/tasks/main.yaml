@@ -2,6 +2,8 @@
 - name: install nginx
   yum: name=nginx state=present
 
+- name: install ssl conf
+  template: "src=conf.tpl dest=/etc/nginx/conf.d/{{domain.server_name}}.conf"
 
 - name: Start the nginx service
   shell: systemctl start nginx

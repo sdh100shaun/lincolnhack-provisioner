@@ -3,3 +3,6 @@ php:
    install: '1'
    packages: ['php72-php-cli', 'php72-php-common', 'php72-php-opcache', 'php72-php-fpm', 'php72-php-intl', 'php72-php-devel','php72-php-xml', 'php72-php-zip','php72-php-pecl-mongodb','php72-php-mbstring','php72-php-pdo',]
    timezone: Europe/London
+domain:
+    server_name: '2018.lincolnhack.org'
+   
