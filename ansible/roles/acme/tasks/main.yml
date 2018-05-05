@@ -1,0 +1,41 @@
+---
+- name: install wget
+  yum: name=wget state=present
+
+- name: install openssl
+  yum: name=openssl state=present
+
+- name: Ensure that our ACME user exists
+  user:
+    name: "acme"
+    createhome: no
+
+- name: Setup our base SSL folder
+  file:
+    path: "/var/ssl"
+    state: directory
+    owner: "acme"
+    group: nginx
+    mode: 0750
+
+- name: install curl
+  yum: name=curl state=present
+
+- name: install acme
+  get_url:
+    url: "https://raw.githubusercontent.com/Neilpang/acme.sh/master/acme.sh"
+    dest: '/usr/local/bin/'
+    mode: '0755'
+
+- stat: path=/etc/pki/tls/certs/2018.lincolnhack.org.cer
+  register: st
+
+- name: install cert
+  shell: "acme.sh --issue -d {{domain.server_name}} -w /usr/share/nginx/html/ --force"
+  when: not st.stat.exists
+
+- name: copy certs
+  shell: "cp /root/.acme.sh/{{domain.server_name}}/*.cer /etc/pki/tls/certs"
+
+- name: move keys
+  shell: "cp /root/.acme.sh/{{domain.server_name}}/*.key /etc/pki/tls/private"
