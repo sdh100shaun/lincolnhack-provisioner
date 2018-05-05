@@ -27,12 +27,15 @@
     dest: '/usr/local/bin/'
     mode: '0755'
 
-- stat: path=/etc/pki/tls/certs/2018.lincolnhack.org.cer
+- stat: "path=/etc/pki/tls/certs/{{domain.server_name}}.cer"
   register: st
 
 - name: install cert
   shell: "acme.sh --issue -d {{domain.server_name}} -w /usr/share/nginx/html/ --force"
   when: not st.stat.exists
+
+  # $ sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096
+
 
 - name: copy certs
   shell: "cp /root/.acme.sh/{{domain.server_name}}/*.cer /etc/pki/tls/certs"
