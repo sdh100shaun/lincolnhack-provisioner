@@ -10,3 +10,6 @@
 
 - name: Holding page
   template: src=index.tpl dest=/usr/share/nginx/html/index.html
+
+- name: gzip config
+  template: src=gzip.tpl dest=/etc/nginx/conf.d/gzip.conf

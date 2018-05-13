@@ -32,7 +32,7 @@
 
 - name: install cert
   shell: "acme.sh --issue -d {{domain.server_name}} -w /usr/share/nginx/html/ --force"
-  when: not st.stat.exists
+  when: ((ansible_date_time.epoch|int - st.stat.mtime) > (1 * 60 * 60 * 24))
 
   # $ sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096
 

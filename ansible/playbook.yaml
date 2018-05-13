@@ -3,9 +3,11 @@
   remote_user: root
   vars_files:
     - vars/all.yaml
+    - vars/tokens.yaml
   roles:
     - geerlingguy.repo-remi
     - php7
     - acme
     - nginx
+    - git
     - users

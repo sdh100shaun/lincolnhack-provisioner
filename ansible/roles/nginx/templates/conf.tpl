@@ -13,7 +13,11 @@ server {
 # SSL configuration
 server {
    listen 443 ssl http2 default deferred;
+   listen [::]:443 ssl http2;
+
    server_name {{domain.server_name}};
+   root /home/lincolnhack/current/public;
+   index index.php;
     ssl_certificate      /etc/pki/tls/certs/fullchain.cer;
   ssl_certificate_key  /etc/pki/tls/private/{{domain.server_name}}.key;
 
@@ -23,10 +27,12 @@ server {
 
     # Enable server-side protection against BEAST attacks
       ssl_prefer_server_ciphers on;
-    ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+  #  ssl_ciphers ECDH+AESGCM:ECDH+AES256:ECDH+AES128:DH+3DES:!ADH:!AECDH:!MD5;
+  ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384;
+  ssl_ecdh_curve secp384r1;
 
       # Disable SSLv3
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
 
         # Diffie-Hellman parameter for DHE ciphersuites
         # $ sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096
@@ -42,12 +48,55 @@ server {
       resolver 8.8.8.8 8.8.4.4 valid=300s;
       resolver_timeout 5s;
 
-# Required for LE certificate enrollment using certbot
-   location '/.well-known/acme-challenge' {
-    default_type "text/plain";
-    root /usr/share/nginx/html/;
-   }
-   location / {
-    root /usr/share/nginx/html/;
-   }
+      # Media: images, icons, video, audio, HTC
+      location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+        expires 1M;
+        access_log off;
+        add_header Cache-Control "public";
+        send_timeout 100m;
+        sendfile  on;
+        sendfile_max_chunk  1m;
+        tcp_nopush          on;
+        tcp_nodelay         on;
+      }
+
+      location ~ /js/|/css/ {
+          access_log          off;
+          log_not_found       off;
+          server_tokens       off;
+          autoindex           off;
+          sendfile            on;
+          sendfile_max_chunk  1m;
+          tcp_nopush          on;
+          tcp_nodelay         on;
+          keepalive_timeout   65;
+          add_header          Cache-Control public;
+          gzip_static         on;
+          gzip_min_length     1000;
+          gzip_comp_level     2;
+          expires             max;
+          fastcgi_hide_header Set-Cookie;
+          root /home/lincolnhack/current/public/;
+      }
+      # Required for LE certificate enrollment using certbot
+         location '/.well-known/acme-challenge' {
+          default_type "text/plain";
+          root /usr/share/nginx/html/;
+         }
+         location / {
+          try_files $uri $uri/ /index.php?$query_string;
+         }
+
+         location ~ /\.ht {
+                         deny all;
+         }
+         location ~ \.php$ {
+
+              try_files $uri =404;
+              fastcgi_split_path_info ^(.+\.php)(/.+)$;
+              fastcgi_pass 127.0.0.1:9000;
+              fastcgi_index index.php;
+              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+              include fastcgi_params;
+          }
 }
