@@ -1,4 +1,4 @@
 *.retry
 !.gitkeep
 inventories/live.yaml
-var/tokens.yaml
+vars/tokens.yaml
