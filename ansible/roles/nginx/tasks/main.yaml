@@ -8,6 +8,11 @@
 - name: Start the nginx service
   shell: systemctl start nginx
 
+- name: ansible create directory example
+  file:
+    path: /usr/share/nginx/html/images
+    state: directory
+
 - name: Holding page
   template: src=index.tpl dest=/usr/share/nginx/html/index.html
 

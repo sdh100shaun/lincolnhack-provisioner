@@ -2,3 +2,4 @@
 !.gitkeep
 inventories/live.yaml
 vars/tokens.yaml
+.DS_Store
