@@ -1,13 +1,27 @@
 ---
-- hosts: live
+- hosts: lincolnhack_2018
   remote_user: root
   vars_files:
     - vars/all.yaml
     - vars/tokens.yaml
+    - vars/2018.yaml
   roles:
     - geerlingguy.repo-remi
     - php7
-    - acme
     - nginx
-    - git
+    - acme   
     - users
+    - git 
+- hosts: lincolnhack_2019
+  remote_user: root
+  vars_files:
+    - vars/all.yaml
+    - vars/2019.yaml
+    - vars/tokens.yaml
+  roles:
+    - geerlingguy.repo-remi
+    - php7
+    - acme   
+    - nginx 
+    - users
+    - git
