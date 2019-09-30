@@ -32,5 +32,14 @@
 - name: basic conf
   template: src=conf.basic.tpl dest=/etc/nginx/conf.d/default.conf
 
+- name: check if conf file exists
+  stat: 
+    path: /etc/nginx/conf.d/{{domain.server_name}}.conf.off
+  register: config_file
+
+- name: create config
+  template: src=conf.tpl dest=/etc/nginx/conf.d/{{domain.server_name}}.conf.off
+  when: config_file.stat.exists == false
+
 - name: restart nginx
   service: name=nginx state=restarted

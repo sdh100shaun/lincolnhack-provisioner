@@ -3,7 +3,7 @@
 # Redirect all HTTP traffic to HTTPS
 server {
    listen 80;
-       server_name 2018.lincolnhack.org lincolnhack.org www.lincolnhack.org;
+       server_name {{domain.server_name}} lincolnhack.org www.lincolnhack.org;
        
       # Required for LE certificate enrollment using certbot
          location '/.well-known/acme-challenge' {

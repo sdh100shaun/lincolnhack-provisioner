@@ -6,8 +6,8 @@
 # Redirect all HTTP traffic to HTTPS
 server {
    listen 80;
-       server_name 2018.lincolnhack.org lincolnhack.org www.lincolnhack.org;
-       return 301 https://2018.lincolnhack.org$request_uri;
+       server_name {{domain.server_name}} lincolnhack.org www.lincolnhack.org;
+       return 301 https://{{domain.server_name}}$request_uri;
 }
 
 # SSL configuration
