@@ -9,9 +9,8 @@
     force: yes
 
 - name: Install PHP 7 packages
-  yum: pkg={{ item }} state=latest
-  with_items:
-    - "{{ php.packages }}"
+  yum: "['{{ php.packages }}']"
+  
 
 
 - name: Create php.ini defaults

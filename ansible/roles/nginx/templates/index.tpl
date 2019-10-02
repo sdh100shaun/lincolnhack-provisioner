@@ -85,7 +85,7 @@
 </style>
 </head>
 <body>
-<p class="message"> Lincolnhack 2018 is happening November 10 -11th 2018. - Save the date. </p>
+<p class="message"> Lincolnhack 2019 is happening November 16 -17th 2019. - Save the date. </p>
 <div id="app">
 
 <div class="flex-center position-ref full-height" >
@@ -96,8 +96,8 @@
             <span class="img">&nbsp;</span>
               </div>
           <div class="flex-center">
-            
-            <p style="display:block;text-align:center;"> See what happened last year <a href="https://2017.lincolnhack.org">Lincolnhack 2017</a></p>
+
+            <p style="display:block;text-align:center;"> See what happened other years <a href="https://2018.lincolnhack.org">Lincolnhack 2018</a> | <a href="https://2017.lincolnhack.org">Lincolnhack 2017</a></p>
 
         </div>
     </div>

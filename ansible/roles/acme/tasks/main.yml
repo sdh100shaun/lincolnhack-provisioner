@@ -32,13 +32,27 @@
 
 - name: install cert
   shell: "acme.sh --issue -d {{domain.server_name}} -w /usr/share/nginx/html/ --force"
-  when: ((ansible_date_time.epoch|int - st.stat.mtime) > (1 * 60 * 60 * 24))
+  when: (ansible_date_time.epoch|int - st.stat.mtime) > (1 * 60 * 60 * 24)
 
-  # $ sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096
-
+- name: generate dh params
+  command: sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096 
+  args: 
+    creates: /etc/pki/tls/certs/dhparam.pem
 
 - name: copy certs
   shell: "cp /root/.acme.sh/{{domain.server_name}}/*.cer /etc/pki/tls/certs"
 
 - name: move keys
   shell: "cp /root/.acme.sh/{{domain.server_name}}/*.key /etc/pki/tls/private"
+
+- name: check if conf file exists
+  stat: 
+    path: /etc/nginx/conf.d/{{domain.server_name}}.conf.off
+  register: config_file
+
+- name: move config
+  shell: "mv /etc/nginx/conf.d/{{domain.server_name}}.conf.off /etc/nginx/conf.d/{{domain.server_name}}.conf"
+  when: config_file.stat.exists == true
+
+- name: restart nginx
+  service: name=nginx state=restarted

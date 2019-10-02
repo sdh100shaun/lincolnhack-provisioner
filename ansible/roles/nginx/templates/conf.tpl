@@ -6,8 +6,8 @@
 # Redirect all HTTP traffic to HTTPS
 server {
    listen 80;
-       server_name 2018.lincolnhack.org;
-       return 301 https://$host$request_uri;
+       server_name {{domain.server_name}} lincolnhack.org www.lincolnhack.org;
+       return 301 https://{{domain.server_name}}$request_uri;
 }
 
 # SSL configuration
@@ -32,7 +32,7 @@ server {
   ssl_ecdh_curve secp384r1;
 
       # Disable SSLv3
-      ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+      ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
         # Diffie-Hellman parameter for DHE ciphersuites
         # $ sudo openssl dhparam -out /etc/pki/tls/certs/dhparam.pem 4096
