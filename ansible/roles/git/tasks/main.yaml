@@ -1,2 +1,7 @@
 - name: git install
   yum: name=git state=present
+
+- name: Ensure collaborators SSH keys are installed
+  authorized_key: user=root key=https://github.com/{{ item }}.keys
+  with_items:
+    - sdh100shaun
