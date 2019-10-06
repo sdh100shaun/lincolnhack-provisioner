@@ -4,6 +4,13 @@
     comment: deploy user
     group: nginx
 
+- name: "home folder"
+  file:
+    path: "/home/lincolnhack"
+    state: directory
+    owner: lincolnhack
+    mode: 0750
+
 - name: "ssh folder"
   file:
     path: "/home/lincolnhack/.ssh"
